@@ -1,0 +1,29 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: shell
+spec:
+  volumes:
+  - name: tls
+    secret:
+      secretName: tls-secret
+      optional: false
+  - name: reverse-proxy-secret
+    secret:
+      secretName: reverse-proxy-sercret
+      defaultMode: 256
+      optional: false
+  containers:
+  - name: ubuntu
+    image: ubuntu
+    command: ["/bin/bash"]
+    args: ["-c", "apt update; apt install openssh-client --assume-yes; sleep 3650d"]
+    envFrom:
+      - configMapRef:
+          name: reverse-proxy-ip
+    volumeMounts:
+    - name: tls
+      mountPath: /etc/tls
+      readOnly: true
+    - name: reverse-proxy-secret
+      mountPath: /ssh

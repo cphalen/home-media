@@ -1,0 +1,36 @@
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: copy-tls
+spec:
+  schedule: "1 * 1 * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: ubuntu
+            image: ubuntu
+            command: ["/bin/bash", "-c"]
+            args: ["apt update; apt install --assume-yes openssh-client; scp -o StrictHostKeyChecking=no -i ssh/reverse_proxy_rsa /etc/tls/tls.crt root@$REVERSE_PROXY_IP:/etc/tls/tls.crt; scp -o StrictHostKeyChecking=no -i ssh/reverse_proxy_rsa /etc/tls/tls.key root@$REVERSE_PROXY_IP:/etc/tls/tls.key; sleep 10"]
+            envFrom:
+              - configMapRef:
+                  name: reverse-proxy-ip
+            volumeMounts:
+            - name: tls
+              mountPath: /etc/tls
+              readOnly: true
+            - name: reverse-proxy-secret
+              mountPath: /ssh
+          restartPolicy: Never
+          volumes:
+          - name: tls
+            secret:
+              secretName: media-ingress-tls
+              optional: false
+          - name: reverse-proxy-secret
+            secret:
+              secretName: reverse-proxy-sercret
+              defaultMode: 256
+              optional: false
