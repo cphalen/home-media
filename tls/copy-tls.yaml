@@ -4,7 +4,7 @@ kind: CronJob
 metadata:
   name: copy-tls
 spec:
-  schedule: "1 * 1 * *"
+  schedule: "0 * 1 * *"
   jobTemplate:
     spec:
       template:
