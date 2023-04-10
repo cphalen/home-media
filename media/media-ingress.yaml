@@ -18,6 +18,13 @@ spec:
         paths:
           - backend:
               service:
+                name: homepage
+                port:
+                  number: 80
+            path: /
+            pathType: Prefix
+          - backend:
+              service:
                 name: jellyfin
                 port:
                   number: 80
@@ -42,5 +49,5 @@ spec:
                 name: transmission
                 port:
                   number: 80
-            path: /downloads
+            path: /transmission
             pathType: Prefix
