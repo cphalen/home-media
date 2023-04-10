@@ -1,37 +1,46 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
- name: media-ingress
- annotations:
-   cert-manager.io/cluster-issuer: lets-encrypt-prod
-   kubernetes.io/ingress.class: public
+  name: media-ingress
+  annotations:
+    cert-manager.io/cluster-issuer: lets-encrypt-prod
+    kubernetes.io/ingress.class: public
+    nginx.ingress.kubernetes.io/auth-type: basic
+    nginx.ingress.kubernetes.io/auth-secret: basic-auth
 spec:
- tls:
- - hosts:
-   - media.cphalen.dev
-   secretName: media-ingress-tls
- rules:
- - host: media.cphalen.dev
-   http:
-     paths:
-     - backend:
-         service:
-           name: jellyfin
-           port:
-             number: 80
-       path: /watch
-       pathType: Prefix
-     - backend:
-         service:
-           name: radarr
-           port:
-             number: 80
-       path: /movies
-       pathType: Prefix
-     - backend:
-         service:
-           name: sonarr
-           port:
-             number: 80
-       path: /tv
-       pathType: Prefix
+  tls:
+    - hosts:
+        - media.cphalen.dev
+      secretName: media-ingress-tls
+  rules:
+    - host: media.cphalen.dev
+      http:
+        paths:
+          - backend:
+              service:
+                name: jellyfin
+                port:
+                  number: 80
+            path: /watch
+            pathType: Prefix
+          - backend:
+              service:
+                name: radarr
+                port:
+                  number: 80
+            path: /movies
+            pathType: Prefix
+          - backend:
+              service:
+                name: sonarr
+                port:
+                  number: 80
+            path: /tv
+            pathType: Prefix
+          - backend:
+              service:
+                name: transmission
+                port:
+                  number: 80
+            path: /downloads
+            pathType: Prefix

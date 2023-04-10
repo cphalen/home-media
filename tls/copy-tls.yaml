@@ -13,7 +13,7 @@ spec:
           - name: ubuntu
             image: ubuntu
             command: ["/bin/bash", "-c"]
-            args: ["apt update; apt install --assume-yes openssh-client; scp -o StrictHostKeyChecking=no -i ssh/reverse_proxy_rsa /etc/tls/tls.crt root@$REVERSE_PROXY_IP:/etc/tls/tls.crt; scp -o StrictHostKeyChecking=no -i ssh/reverse_proxy_rsa /etc/tls/tls.key root@$REVERSE_PROXY_IP:/etc/tls/tls.key; sleep 10"]
+            args: ["apt update; apt install --assume-yes openssh-client; scp -o StrictHostKeyChecking=no -i ssh/reverse_proxy_rsa /etc/tls/tls.crt root@$REVERSE_PROXY_IP:/etc/tls/tls.crt; scp -o StrictHostKeyChecking=no -i ssh/reverse_proxy_rsa /etc/tls/tls.key root@media.cphalen.dev:/etc/tls/tls.key; sleep 10"]
             envFrom:
               - configMapRef:
                   name: reverse-proxy-ip
